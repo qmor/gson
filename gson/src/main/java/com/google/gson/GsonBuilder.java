@@ -94,6 +94,7 @@ public final class GsonBuilder {
   private boolean prettyPrinting = DEFAULT_PRETTY_PRINT;
   private boolean generateNonExecutableJson = DEFAULT_JSON_NON_EXECUTABLE;
   private boolean lenient = DEFAULT_LENIENT;
+  private boolean json5 = false;
 
   /**
    * Creates a GsonBuilder instance that can be used to build Gson with various configuration
@@ -578,6 +579,18 @@ public final class GsonBuilder {
   }
 
   /**
+   * Set JSON5 compability 
+   * https://json5.org/
+   * @param json5
+   * @return
+   */
+  public GsonBuilder setJSON5Mode(boolean json5)
+  {
+	  this.json5 = json5;
+	  return this;
+  }
+  
+  /**
    * Creates a {@link Gson} instance based on the current configuration. This method is free of
    * side-effects to this {@code GsonBuilder} instance and hence can be called multiple times.
    *
@@ -599,7 +612,7 @@ public final class GsonBuilder {
         generateNonExecutableJson, escapeHtmlChars, prettyPrinting, lenient,
         serializeSpecialFloatingPointValues, longSerializationPolicy,
         datePattern, dateStyle, timeStyle,
-        this.factories, this.hierarchyFactories, factories);
+        this.factories, this.hierarchyFactories, factories,json5);
   }
 
   @SuppressWarnings("unchecked")

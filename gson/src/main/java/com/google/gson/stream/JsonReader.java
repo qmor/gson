@@ -228,7 +228,8 @@ public class JsonReader implements Closeable {
 
   /** True to accept non-spec compliant JSON */
   private boolean lenient = false;
-
+  
+  private boolean json5;
   /**
    * Use a manual buffer to easily read and unread upcoming characters, and
    * also so we can create strings without an intermediate StringBuilder.
@@ -1186,7 +1187,21 @@ public class JsonReader implements Closeable {
         peekedString = nextQuotedValue(p == PEEKED_SINGLE_QUOTED ? '\'' : '"');
       }
       try {
-        result = Integer.parseInt(peekedString);
+    	if (!json5)
+    	{
+    		result = Integer.parseInt(peekedString);
+    	}
+    	else
+    	{
+    		if (peekedString.toLowerCase().startsWith("0x"))
+    		{
+    			result = Integer.parseInt(peekedString.substring(2),16);
+    		}
+    		else
+    		{
+    			result = Integer.parseInt(peekedString);
+    		}
+    	}
         peeked = PEEKED_NONE;
         pathIndices[stackSize - 1]++;
         return result;
@@ -1490,7 +1505,11 @@ public class JsonReader implements Closeable {
     }
     return result.toString();
   }
-
+  
+  public void setJson5(boolean json5) {
+	  this.json5 = json5;
+  }
+  
   /**
    * Unescapes the character identified by the character or characters that
    * immediately follow a backslash. The backslash '\' should have already
